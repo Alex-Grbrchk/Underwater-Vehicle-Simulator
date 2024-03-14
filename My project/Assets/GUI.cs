@@ -23,10 +23,17 @@ public class GUI : MonoBehaviour
     void Update()
     {
         CurH.text = "" + Mvs.transform.position.y + " m";
-        Mvs.height = float.Parse(H.text);
+        if(float.Parse(H.text) <= 0)
+        {
+            Mvs.height = float.Parse(H.text);
+        }
 
-        CurS.text = "" + Mvs.speed + " mps";
-        Mvs.speed = float.Parse(S.text);
+        CurS.text = "" + Mvs.RB.velocity.magnitude + " mps";
+        if (float.Parse(S.text) <= 3 && float.Parse(S.text) >=0)
+        {
+            Mvs.speed = float.Parse(S.text);
+        }
+        
     }
     void UPH()
     {
@@ -47,7 +54,10 @@ public class GUI : MonoBehaviour
 
     void UPS()
     {
-        Mvs.speed++;
+        if (Mvs.speed < 3)
+        {
+            Mvs.speed = Mvs.speed + 0.1f;
+        }
         S.text = "" + Mvs.speed;
     }
 
@@ -55,11 +65,11 @@ public class GUI : MonoBehaviour
     {
         if (Mvs.speed > 0)
         {
-            Mvs.speed--;
+            Mvs.speed = Mvs.speed - 0.1f;
         }
         else
         {
-            if (Mvs.speed < 0) Mvs.speed = 0;
+            if (Mvs.speed < 0) Mvs.speed = 0f;
         }
         S.text = "" + Mvs.speed;
 

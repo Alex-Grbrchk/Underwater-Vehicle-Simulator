@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Moving : MonoBehaviour
 {
-    public float height, speed, HForce = 2f;
+    public float height, speed, HForce = 2f,Rot = 0f;
     public Rigidbody RB;
 
     // Start is called before the first frame update
@@ -27,28 +27,41 @@ public class Moving : MonoBehaviour
                 RB.velocity = new Vector3(RB.velocity.x, Mathf.Abs(height - gameObject.transform.position.y), RB.velocity.z);
             }
         }
-
-
+        if (Input.GetKey(KeyCode.UpArrow))
+        {
+            RB.AddRelativeForce(new Vector3(0,0, 1 * speed * Time.fixedDeltaTime),ForceMode.VelocityChange);
+        }
+        if (Input.GetKey(KeyCode.DownArrow))
+        {
+            RB.AddRelativeForce(new Vector3(0, 0, -1 * speed * Time.fixedDeltaTime), ForceMode.VelocityChange);
+        }
+        RB.rotation = Quaternion.Euler(0,Rot,0);
+        if (RB.velocity.magnitude > 0.01) { RB.velocity -= RB.velocity.normalized * 0.5f * Time.fixedDeltaTime; } else
+        {
+            RB.velocity = Vector3.zero;
+        }
+        //RB.AddTorque(Vector3.Cross(new Vector3(0,this.transform.rotation.y,0), new Vector3(0,Rot,0))*3,);
     }
     void Update()
     {
 
-        if (Input.GetKey(KeyCode.UpArrow))
+        /*if (Input.GetKey(KeyCode.UpArrow))
         {
+
             this.transform.Translate(new Vector3(0, 0, speed) * Time.deltaTime);
         }
         if (Input.GetKey(KeyCode.DownArrow)) 
         {
             this.transform.Translate(new Vector3(0, 0, -speed) * Time.deltaTime);
-        }
+        }*/
         if (Input.GetKey(KeyCode.LeftArrow))
         {
-            this.transform.Rotate(0, -30 * Time.deltaTime, 0);
+            Rot += -3 * Time.deltaTime;
 
         }
         if (Input.GetKey(KeyCode.RightArrow))
         {
-            this.transform.Rotate(0, 30 * Time.deltaTime, 0);
+            Rot += 3 * Time.deltaTime;
         }
     }
 }

@@ -1,15 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ViewChage : MonoBehaviour
 {
     // Start is called before the first frame update\
-    public Camera Cam1, Cam2;
+    public GameObject Cam1, Cam2;
+    public Button Front, Main;
     void Start()
     {
-        Cam1.enabled = true;
-        Cam2.enabled = false;
+        Cam1.SetActive (false);
+        Cam2.SetActive (true);
+        Front.gameObject.SetActive(true);
+        Main.gameObject.SetActive(false);
+        Front.onClick.AddListener(ViewCh1);
+        Main.onClick.AddListener(ViewCh2);
     }
 
     // Update is called once per frame
@@ -17,15 +23,32 @@ public class ViewChage : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            if(Cam1.enabled) { 
-                Cam1.enabled = false;
-                Cam2.enabled = true;
+            if (Cam1.activeSelf == true)
+            {
+                Cam1.SetActive(false);
+                Cam2.SetActive(true);
             }
             else
             {
-                Cam1.enabled = true;
-                Cam2.enabled = false;
+                Cam1.SetActive(true);
+                Cam2.SetActive(false);
             }
         }
+    }
+
+    void ViewCh1()
+    {
+
+        Cam1.SetActive(true);
+        Cam2.SetActive(false);
+        Main.gameObject.SetActive(true);
+        Front.gameObject.SetActive(false);
+    }
+    void ViewCh2()
+    {
+        Cam1.SetActive(false);
+        Cam2.SetActive(true);
+        Front.gameObject.SetActive(true);
+        Main.gameObject.SetActive(false);
     }
 }
