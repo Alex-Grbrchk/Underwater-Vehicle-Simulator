@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using UnityEngine;
 using TMPro;
 
+
 public class GUI : MonoBehaviour
 {
     public Button UpHeight, DownHeight, UpSpeed, DownSpeed;
@@ -28,7 +29,7 @@ public class GUI : MonoBehaviour
             Mvs.height = float.Parse(H.text);
         }
 
-        CurS.text = "" + Mvs.RB.velocity.magnitude + " mps";
+        CurS.text = "" + System.Math.Sqrt(System.Math.Pow(Mvs.RB.velocity.x, 2) + System.Math.Pow(Mvs.RB.velocity.z, 2))  + " mps";
         if (float.Parse(S.text) <= 3 && float.Parse(S.text) >=0)
         {
             Mvs.speed = float.Parse(S.text);
