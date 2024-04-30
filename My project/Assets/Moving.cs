@@ -40,20 +40,11 @@ public class Moving : MonoBehaviour
         {
             RB.velocity = Vector3.zero;
         }
-        //RB.AddTorque(Vector3.Cross(new Vector3(0,this.transform.rotation.y,0), new Vector3(0,Rot,0))*3,);
+    
     }
     void Update()
     {
 
-        /*if (Input.GetKey(KeyCode.UpArrow))
-        {
-
-            this.transform.Translate(new Vector3(0, 0, speed) * Time.deltaTime);
-        }
-        if (Input.GetKey(KeyCode.DownArrow)) 
-        {
-            this.transform.Translate(new Vector3(0, 0, -speed) * Time.deltaTime);
-        }*/
         if (Input.GetKey(KeyCode.LeftArrow))
         {
             Rot += -3 * Time.deltaTime;

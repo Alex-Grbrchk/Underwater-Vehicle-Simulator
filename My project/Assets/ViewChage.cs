@@ -6,16 +6,18 @@ using UnityEngine.UI;
 public class ViewChage : MonoBehaviour
 {
     // Start is called before the first frame update\
-    public GameObject Cam1, Cam2;
-    public Button Front, Main;
-    void Start()
+    public GameObject Cam1, Cam2, Cam1s, Cam2s;
+    public Button View;
+    public bool f = true;
+    
+    void Awake()
     {
-        Cam1.SetActive (false);
+        Cam1s.SetActive (true);
         Cam2.SetActive (true);
-        Front.gameObject.SetActive(true);
-        Main.gameObject.SetActive(false);
-        Front.onClick.AddListener(ViewCh1);
-        Main.onClick.AddListener(ViewCh2);
+        Cam1.SetActive(false);
+        Cam2s.SetActive(false);
+        View.onClick.AddListener(ViewCh);
+ 
     }
 
     // Update is called once per frame
@@ -23,32 +25,29 @@ public class ViewChage : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            if (Cam1.activeSelf == true)
-            {
-                Cam1.SetActive(false);
-                Cam2.SetActive(true);
-            }
-            else
-            {
-                Cam1.SetActive(true);
-                Cam2.SetActive(false);
-            }
+            ViewCh();
+          
         }
     }
 
-    void ViewCh1()
-    {
+  
 
-        Cam1.SetActive(true);
-        Cam2.SetActive(false);
-        Main.gameObject.SetActive(true);
-        Front.gameObject.SetActive(false);
-    }
-    void ViewCh2()
+    void ViewCh()
     {
-        Cam1.SetActive(false);
-        Cam2.SetActive(true);
-        Front.gameObject.SetActive(true);
-        Main.gameObject.SetActive(false);
+        if (Cam1s.activeSelf == true)
+        {
+            Cam1s.SetActive(false);
+            Cam2.SetActive(false);
+            Cam1.SetActive(true);
+            Cam2s.SetActive(true);
+        }
+        else
+        {
+            Cam1s.SetActive(true);
+            Cam2.SetActive(true);
+            Cam1.SetActive(false);
+            Cam2s.SetActive(false);
+        }
     }
+   
 }

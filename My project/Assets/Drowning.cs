@@ -73,8 +73,8 @@ public class DSRV
         reff = z_dN;
        
         L = 5;
-        deltaMax = 20;//20;
-        T_delta = 1;//1;
+        deltaMax = 50;//20;
+        T_delta =  Time.deltaTime;//1;
         U0 = 4.11;
         W0 = 0;
 
@@ -378,28 +378,55 @@ public class DSRV
 
 public class Drowning : MonoBehaviour
 {
+    //public Rigidbody RB;
     public GameObject Boat;
     DSRV Vehicle;
     List<Double> BoatD;
     List<Double> BoatG;
+    public double height;
+
+    void Start()
+    {
+        //RB = gameObject.GetComponent<Rigidbody>();
+        height = 0;
+    }
     private void Awake()
     {
+        
         Vehicle = new(Boat.transform.position.y);
         BoatD = new() { Boat.transform.position.x, Boat.transform.position.z, Boat.transform.position.y, Boat.transform.rotation.x*Math.PI/180, Boat.transform.rotation.z * Math.PI / 180, Boat.transform.rotation.y * Math.PI / 180 };
+        BoatG = BoatD;
+        Vehicle.U0 = 0.0001; //скорость
     }
-
+    bool Sim = false;
     private void FixedUpdate()
     {
         if (Input.GetKey(KeyCode.W)) {
 
-            Vehicle.reff = -10;
-
+            if (Boat.transform.position.y != height)
+            {
+                Vehicle.reff = height;
+            }
+            Vehicle.U0 = 4.11;
+            Sim = true;
+        }
+        if (Sim)
+        {
+            BoatG = Vehicle.Simulate(BoatD, Time.fixedDeltaTime);
+            BoatD = BoatG;
+            Boat.GetComponent<Rigidbody>().velocity = new UnityEngine.Vector3((float)BoatG[1], (float)BoatG[2], (float)BoatG[0]) - gameObject.transform.position;
+            Boat.GetComponent<Rigidbody>().AddTorque(UnityEngine.Quaternion.ToEulerAngles(UnityEngine.Quaternion.Euler((float)(BoatG[4] * 180 / Math.PI), (float)(BoatG[5] * 180 / Math.PI), (float)(BoatG[3] * 180 / Math.PI))) - UnityEngine.Quaternion.ToEulerAngles(gameObject.transform.rotation), ForceMode.VelocityChange);
         }
 
-        BoatG = Vehicle.Simulate(BoatD, Time.fixedDeltaTime);
-        Boat.transform.SetPositionAndRotation(new UnityEngine.Vector3((float)BoatG[0], (float)BoatG[2], (float)BoatG[1]), UnityEngine.Quaternion.Euler((float)(-BoatG[3]*180/Math.PI ), (float)( -BoatG[5] * 180 / Math.PI), (float)( -BoatG[4] * 180 / Math.PI)));
-        BoatD = BoatG;
-    } 
+        //Boat.GetComponent<Rigidbody>().Move(new UnityEngine.Vector3((float)BoatG[1], (float)BoatG[2], (float)BoatG[0]), UnityEngine.Quaternion.Euler((float)(-BoatG[3] * 180 / Math.PI), (float)(-BoatG[5] * 180 / Math.PI), (float)(-BoatG[4] * 180 / Math.PI)));
+        //Boat.transform.SetPositionAndRotation(new UnityEngine.Vector3((float)BoatG[1], (float)BoatG[2], (float)BoatG[0]), UnityEngine.Quaternion.Euler((float)(-BoatG[3]*180/Math.PI ), (float)( -BoatG[5] * 180 / Math.PI), (float)( -BoatG[4] * 180 / Math.PI)));
+        //BoatD = new() { Boat.transform.position.x, Boat.transform.position.z, Boat.transform.position.y, Boat.transform.rotation.x * Math.PI / 180, Boat.transform.rotation.z * Math.PI / 180, Boat.transform.rotation.y * Math.PI / 180 };
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        Sim = false;
+        BoatD = new() { Boat.transform.position.x, Boat.transform.position.z, Boat.transform.position.y, Boat.transform.rotation.x * Math.PI / 180, Boat.transform.rotation.z * Math.PI / 180, Boat.transform.rotation.y * Math.PI / 180 };
+    }
 }
 
 
